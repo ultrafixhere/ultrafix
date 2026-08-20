@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ULTRAFIX — Next-Gen PC & Laptop Optimization</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfeff',
+              100: '#cff4fe',
+              400: '#22d3ee',
+              500: '#06b6d4',
+              600: '#0891b2',
+              700: '#0e7490',
+              900: '#164e63',
+            },
+            accent: {
+              blue: '#3b82f6',
+              indigo: '#6366f1',
+              cyan: '#00f0ff',
+            }
+          },
+          boxShadow: {
+            'glow-sm': '0 0 15px -3px rgba(6, 182, 212, 0.25)',
+            'glow-md': '0 0 25px -5px rgba(6, 182, 212, 0.35)',
+            'glow-lg': '0 0 40px -10px rgba(6, 182, 212, 0.45)',
+            'glass': '0 20px 30px -10px rgba(15, 23, 42, 0.05), 0 0 15px 0 rgba(6, 182, 212, 0.05)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.08), transparent 45%),
+        radial-gradient(circle at 10% 30%, rgba(59, 130, 246, 0.05), transparent 35%),
+        radial-gradient(circle at 90% 70%, rgba(99, 102, 241, 0.04), transparent 35%);
+      background-attachment: fixed;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    /* Glassmorphism panel styling */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(6, 182, 212, 0.4);
+      box-shadow: 0 12px 30px -5px rgba(6, 182, 212, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+      transform: translateY(-2px);
+    }
+
+    .glass-card-static {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .glass-header {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    /* Custom glowing text */
+    .ultrafix-logo {
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .ultrafix-text-ultra {
+      color: #0f172a;
+    }
+
+    .ultrafix-text-fix {
+      background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.4));
+    }
+
+    /* Pulse animation for radar scanner */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.2; transform: scale(0.98); }
+      50% { opacity: 0.8; transform: scale(1.02); }
+    }
+
+    .animate-pulse-glow {
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes rotateRadar {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .animate-radar {
+      animation: rotateRadar 4s linear infinite;
+    }
+
+    /* Custom scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+
+    /* Active Tab Glow Pill */
+    .nav-tab-active {
+      color: #0891b2;
+      background: rgba(6, 182, 212, 0.08);
+      border-bottom: 2px solid #06b6d4;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-cyan-500 selection:text-white">
+
+  <!-- PERSISTENT ULTRAFIX HEADER -->
+  <header class="sticky top-0 z-40 glass-header shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand Identity -->
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+          <div class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900 text-white shadow-glow-sm overflow-hidden group">
+            <div class="absolute inset-0 bg-gradient-to-tr from-cyan-500 to-blue-600 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+            <i class="fa-solid fa-bolt text-xl relative z-10 text-cyan-300"></i>
+          </div>
+          <div>
+            <div class="text-2xl sm:text-3xl ultrafix-logo flex items-center tracking-tight">
+              <span class="ultrafix-text-ultra">ULTRA</span>
+              <span class="ultrafix-text-fix">FIX</span>
+              <span class="ml-2 px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest bg-cyan-100 text-cyan-800 rounded-full border border-cyan-300">v3.4 PRO</span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium tracking-wide">Optimize. Accelerate. Dominate.</p>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs (PERSISTENT & ALWAYS VISIBLE) -->
+        <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 bg-slate-100/80 p-1.5 rounded-xl border border-slate-200">
+          <button id="nav-home" onclick="switchTab('home')" class="px-4 py-2 text-sm font-medium text-slate-600 rounded-lg hover:text-slate-900 hover:bg-white transition-all flex items-center space-x-2">
+            <i class="fa-solid fa-house text-xs"></i>
+            <span>Home</span>
+          </button>
+          <button id="nav-manual" onclick="switchTab('manual')" class="px-4 py-2 text-sm font-medium text-slate-600 rounded-lg hover:text-slate-900 hover:bg-white transition-all flex items-center space-x-2">
+            <i class="fa-solid fa-sliders text-xs"></i>
+            <span>Manual Optimize</span>
+          </button>
+          <button id="nav-auto" onclick="switchTab('auto')" class="px-4 py-2 text-sm font-medium text-slate-600 rounded-lg hover:text-slate-900 hover:bg-white transition-all flex items-center space-x-2">
+            <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+            <span>Auto Optimize</span>
+          </button>
+          <button id="nav-status" onclick="switchTab('status')" class="px-4 py-2 text-sm font-medium text-slate-600 rounded-lg hover:text-slate-900 hover:bg-white transition-all flex items-center space-x-2">
+            <i class="fa-solid fa-chart-line text-xs"></i>
+            <span>System Status</span>
+          </button>
+          <button id="nav-about" onclick="switchTab('about')" class="px-4 py-2 text-sm font-medium text-slate-600 rounded-lg hover:text-slate-900 hover:bg-white transition-all flex items-center space-x-2">
+            <i class="fa-solid fa-circle-info text-xs"></i>
+            <span>About</span>
+          </button>
+        </nav>
+
+        <!-- Quick System Readiness Pill -->
+        <div class="hidden lg:flex items-center space-x-3 pl-4 border-l border-slate-200">
+          <div class="text-right">
+            <div class="text-xs text-slate-400 font-medium">System Health</div>
+            <div class="text-xs font-bold text-emerald-600 flex items-center justify-end space-x-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span id="header-health-score">88% Ready</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button onclick="toggleMobileNav()" class="md:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+          <i class="fa-solid fa-bars text-xl" id="mobile-menu-icon"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Dropdown Navigation -->
+      <div id="mobile-nav" class="hidden md:hidden py-3 border-t border-slate-200 space-y-1">
+        <button onclick="switchTab('home'); toggleMobileNav();" class="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg flex items-center space-x-3">
+          <i class="fa-solid fa-house w-5 text-cyan-600"></i>
+          <span>Home</span>
+        </button>
+        <button onclick="switchTab('manual'); toggleMobileNav();" class="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg flex items-center space-x-3">
+          <i class="fa-solid fa-sliders w-5 text-cyan-600"></i>
+          <span>Manual Optimize</span>
+        </button>
+        <button onclick="switchTab('auto'); toggleMobileNav();" class="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg flex items-center space-x-3">
+          <i class="fa-solid fa-wand-magic-sparkles w-5 text-cyan-600"></i>
+          <span>Auto Optimize</span>
+        </button>
+        <button onclick="switchTab('status'); toggleMobileNav();" class="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg flex items-center space-x-3">
+          <i class="fa-solid fa-chart-line w-5 text-cyan-600"></i>
+          <span>System Status</span>
+        </button>
+        <button onclick="switchTab('about'); toggleMobileNav();" class="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg flex items-center space-x-3">
+          <i class="fa-solid fa-circle-info w-5 text-cyan-600"></i>
+          <span>About</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- BROWSER LIMITATION SAFETY BANNER -->
+  <div class="bg-slate-900 text-white text-xs py-2 px-4 border-b border-cyan-500/30">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center space-x-2 text-slate-300">
+        <i class="fa-solid fa-shield-halved text-cyan-400"></i>
+        <span><strong class="text-white">Browser Safety Notice:</strong> This web edition provides high-fidelity analysis simulation, live latency tests, and guided Windows performance instructions.</span>
+      </div>
+      <a href="#about" onclick="switchTab('about')" class="underline text-cyan-400 hover:text-cyan-300 whitespace-nowrap">Learn how web & native desktop permissions work &rarr;</a>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT VIEWPORT CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- =================================================================== -->
+    <!-- SECTION 1: MAIN HOMEPAGE                                            -->
+    <!-- =================================================================== -->
+    <section id="section-home" class="space-y-10 transition-all duration-300">
+      
+      <!-- Hero Banner -->
+      <div class="glass-card-static rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-glass border border-slate-200/80">
+        <div class="absolute -right-20 -top-20 w-80 h-80 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="relative z-10 max-w-3xl space-y-4">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-700 text-xs font-semibold uppercase tracking-wider">
+            <i class="fa-solid fa-microchip"></i>
+            <span>Next-Generation Optimization Engine</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Unlock the Maximum Potential of Your <span class="ultrafix-text-fix">PC & Laptop</span>
+          </h1>
+          <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+            Eliminate input latency, eliminate resource bottlenecks, optimize Windows background tasks, and maximize FPS with enterprise-grade system tuning built for gamers and creators.
+          </p>
+        </div>
+      </div>
+
+      <!-- Two Large Main Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Card 1: Manual Optimize -->
+        <div onclick="switchTab('manual')" class="glass-card rounded-3xl p-8 cursor-pointer group flex flex-col justify-between border-2 border-transparent hover:border-cyan-400 relative overflow-hidden">
+          <div class="space-y-6">
+            <div class="flex items-center justify-between">
+              <div class="w-16 h-16 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-2xl group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-sm">
+                <i class="fa-solid fa-wrench"></i>
+              </div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 bg-slate-100 px-3 py-1 rounded-full">Granular Control</span>
+            </div>
+            
+            <div>
+              <h3 class="text-2xl font-bold text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center">
+                Manual Optimize
+                <i class="fa-solid fa-arrow-right text-sm ml-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+              </h3>
+              <p class="text-slate-600 mt-2 leading-relaxed text-sm sm:text-base">
+                Take full control of your PC. Choose exactly what you want to optimize—CPU background load, RAM allocation, GPU shader caching, mouse polling latency, SSD TRIM, or network buffers.
+              </p>
+            </div>
+
+            <!-- Quick tags -->
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">CPU</span>
+              <span class="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">RAM</span>
+              <span class="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">GPU</span>
+              <span class="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">Mouse & Keyboard</span>
+              <span class="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">+10 More</span>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-cyan-600">
+            <span>Launch Manual Dashboard</span>
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Card 2: Auto Optimize -->
+        <div onclick="switchTab('auto')" class="glass-card rounded-3xl p-8 cursor-pointer group flex flex-col justify-between border-2 border-transparent hover:border-cyan-400 relative overflow-hidden">
+          <div class="space-y-6">
+            <div class="flex items-center justify-between">
+              <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                <i class="fa-solid fa-bolt-lightning"></i>
+              </div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full">AI Automated</span>
+            </div>
+            
+            <div>
+              <h3 class="text-2xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center">
+                Auto Optimize
+                <i class="fa-solid fa-arrow-right text-sm ml-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+              </h3>
+              <p class="text-slate-600 mt-2 leading-relaxed text-sm sm:text-base">
+                Scan your system and intelligently identify optimization opportunities across all sub-systems. Get clear performance recommendations prior to making any system adjustments.
+              </p>
+            </div>
+
+            <!-- Quick tags -->
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md">Full Diagnostics</span>
+              <span class="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md">Bottleneck Analysis</span>
+              <span class="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md">Safe Review</span>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-blue-600">
+            <span>Open Auto Scanner</span>
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Rapid Quick Telemetry Snapshot -->
+      <div class="glass-card-static rounded-2xl p-6 border border-slate-200">
+        <div class="flex items-center justify-between mb-4">
+          <h4 class="font-bold text-slate-900 flex items-center text-base">
+            <i class="fa-solid fa-gauge-high text-cyan-500 mr-2"></i> Quick Telemetry Overview
+          </h4>
+          <button onclick="switchTab('status')" class="text-xs text-cyan-600 font-semibold hover:underline">Full Telemetry Dashboard &rarr;</button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+            <div class="text-xs text-slate-500 font-medium">Processor Load</div>
+            <div class="text-xl font-bold text-slate-800 mt-1" id="quick-cpu">24%</div>
+            <div class="text-[10px] text-emerald-600 mt-0.5">8 Cores Active</div>
+          </div>
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+            <div class="text-xs text-slate-500 font-medium">Memory Allocation</div>
+            <div class="text-xl font-bold text-slate-800 mt-1" id="quick-ram">7.2 GB / 16 GB</div>
+            <div class="text-[10px] text-amber-600 mt-0.5">45% Memory In Use</div>
+          </div>
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+            <div class="text-xs text-slate-500 font-medium">Graphics Telemetry</div>
+            <div class="text-xl font-bold text-slate-800 mt-1">DirectX 12</div>
+            <div class="text-[10px] text-cyan-600 mt-0.5">P-State 0 Active</div>
+          </div>
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+            <div class="text-xs text-slate-500 font-medium">Input Latency Buffer</div>
+            <div class="text-xl font-bold text-slate-800 mt-1">1.0 ms</div>
+            <div class="text-[10px] text-emerald-600 mt-0.5">Optimal Response</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- =================================================================== -->
+    <!-- SECTION 2: MANUAL OPTIMIZATION DASHBOARD                            -->
+    <!-- =================================================================== -->
+    <section id="section-manual" class="hidden space-y-8">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center">
+            <i class="fa-solid fa-wrench text-cyan-500 mr-3"></i> Manual Optimization Dashboard
+          </h2>
+          <p class="text-slate-500 text-sm mt-1">Select a subsystem below to inspect metrics, diagnose issues, and trigger guided optimization routines.</p>
+        </div>
+        
+        <!-- Category Filter Search -->
+        <div class="relative w-full md:w-72">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input type="text" id="category-search" onkeyup="filterCategories()" placeholder="Search modules (e.g. CPU, Mouse)..." class="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white shadow-sm">
+        </div>
+      </div>
+
+      <!-- Categories Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="categories-grid">
+
+        <!-- 1. CPU Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="cpu optimization processor analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-microchip"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Core Logic</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">CPU Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Analyze CPU performance, background processes, power behavior, and unnecessary resource usage to help improve responsiveness and reduce CPU load.
+              </p>
+            </div>
+
+            <!-- Features / System Status -->
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>CPU Usage:</span><strong class="text-slate-900 font-mono">18% Idle</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Background Threads:</span><strong class="text-slate-900 font-mono">142 Threads</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Power Plan Check:</span><strong class="text-amber-600 font-semibold">Balanced (Sub-optimal)</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Core Parking Status:</span><strong class="text-cyan-700 font-semibold">Active</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('ANALYZE CPU', 'cpu')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>ANALYZE CPU</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. RAM Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="ram memory optimization analyze background">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-memory"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Memory</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">RAM Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Analyze memory usage and identify unnecessary background applications and non-paged pool processes consuming system memory.
+              </p>
+            </div>
+
+            <!-- Features -->
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Current RAM Usage:</span><strong class="text-slate-900 font-mono">7.8 GB / 16 GB</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Background Memory:</span><strong class="text-slate-900 font-mono">2.1 GB Consumed</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Standby Cache:</span><strong class="text-slate-900 font-mono">3.4 GB Reclaimable</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Memory Leaks:</span><strong class="text-emerald-600 font-semibold">None Detected</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('ANALYZE RAM', 'ram')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>ANALYZE RAM</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. SSD Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="ssd solid state drive optimization trim health analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-hard-drive"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">NVMe / Solid State</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">SSD Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Analyze SSD health, storage usage, unnecessary temporary files, TRIM command status, and block wear degradation.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Storage Allocated:</span><strong class="text-slate-900 font-mono">340 GB / 512 GB</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Temporary Files:</span><strong class="text-amber-600 font-mono">4.2 GB Removable</strong></div>
+              <div class="flex justify-between text-slate-600"><span>TRIM Status:</span><strong class="text-emerald-600 font-semibold">Enabled</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Drive Health (S.M.A.R.T):</span><strong class="text-emerald-600 font-semibold">98% Good</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('ANALYZE SSD', 'ssd')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>ANALYZE SSD</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. HDD Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="hdd hard drive fragmentation disk health analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-compact-disc"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Mechanical Disk</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">HDD Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Analyze hard drive storage, unnecessary files, fragmentation status, and disk sector access performance.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Storage Analysis:</span><strong class="text-slate-900 font-mono">1.2 TB / 2.0 TB</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Fragmentation Level:</span><strong class="text-amber-600 font-mono">12% Fragmented</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Temp Junk Detected:</span><strong class="text-slate-900 font-mono">8.1 GB</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Disk Health Status:</span><strong class="text-emerald-600 font-semibold">Healthy</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('ANALYZE HDD', 'hdd')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>ANALYZE HDD</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 5. GPU Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="gpu graphics graphics card display shader analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-display"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Graphics Core</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">GPU Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Analyze graphics hardware configuration, shader cache sizing, driver settings, and display latency parameters.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>GPU Model Check:</span><strong class="text-slate-900 font-mono">High-Performance GPU</strong></div>
+              <div class="flex justify-between text-slate-600"><span>VRAM Allocation:</span><strong class="text-slate-900 font-mono">1.8 GB / 8.0 GB</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Power Mode Analysis:</span><strong class="text-amber-600 font-semibold">Optimal Power (Limit)</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Shader Cache Status:</span><strong class="text-slate-900 font-mono">Default 1 GB</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('ANALYZE GPU', 'gpu')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>ANALYZE GPU</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 6. Mouse Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="mouse sensitivity polling rate acceleration input analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-arrow-pointer"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Input Responsiveness</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Mouse Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Analyze mouse-related settings that affect responsiveness, pointer precision curves, and raw input buffer behavior.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Pointer Acceleration:</span><strong class="text-rose-600 font-semibold">Enabled (Enhance Precision)</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Polling Rate Detection:</span><strong class="text-slate-900 font-mono">1000 Hz Buffer</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Input Delay Curve:</span><strong class="text-cyan-700 font-mono">Sub-1ms Queue</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Raw Input Stream:</span><strong class="text-amber-600 font-semibold">Disabled in OS</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('ANALYZE MOUSE', 'mouse')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>ANALYZE MOUSE</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 7. Keyboard Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="keyboard input delay repeat rate accessibility analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-pink-100 text-pink-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-keyboard"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Input Queue</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Keyboard Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Analyze keyboard input settings, key repeat delays, filter keys interference, and system input queue parameters.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Key Repeat Delay:</span><strong class="text-slate-900 font-mono">250 ms (Standard)</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Filter Keys Status:</span><strong class="text-emerald-600 font-semibold">Off</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Sticky Keys Interference:</span><strong class="text-amber-600 font-semibold">Prompt Active</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Response Delay:</span><strong class="text-slate-900 font-mono">Low</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('ANALYZE KEYBOARD', 'keyboard')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>ANALYZE KEYBOARD</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 8. Gaming Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="gaming fps performance game mode low latency analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-gamepad"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Gaming Tuning</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Gaming Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Configure Windows Game Mode, GPU scheduling, background updates suspension, and game process priority flags.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Windows Game Mode:</span><strong class="text-emerald-600 font-semibold">Enabled</strong></div>
+              <div class="flex justify-between text-slate-600"><span>HAGS Hardware Scheduling:</span><strong class="text-amber-600 font-semibold">Disabled</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Background Game DVR:</span><strong class="text-rose-600 font-semibold">Recording Active</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('GAMING OPTIMIZATION', 'gaming')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>GAMING OPTIMIZATION</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 9. Windows Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="windows telemetry services visual effects analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-brands fa-windows"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">OS Services</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Windows Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Tune non-essential OS services, telemetry logging background tasks, dynamic visual animations, and search indexing overhead.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Telemetry Services:</span><strong class="text-amber-600 font-semibold">4 Active</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Visual Animation Overhead:</span><strong class="text-slate-900 font-mono">Maximum Quality</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Search Indexer Load:</span><strong class="text-emerald-600 font-semibold">Low</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('WINDOWS OPTIMIZATION', 'windows')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>WINDOWS OPTIMIZATION</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 10. Startup Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="startup autorun background boot speed analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-rocket"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Boot Delay</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Startup Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Inspect high-impact auto-starting applications slowing down boot times and running unnecessarily in the background.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Auto-Launch Apps:</span><strong class="text-rose-600 font-mono">14 Enabled</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Boot Delay Impact:</span><strong class="text-amber-600 font-semibold">+8.4 Seconds</strong></div>
+              <div class="flex justify-between text-slate-600"><span>High Impact Services:</span><strong class="text-slate-900 font-mono">5 Apps</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('STARTUP OPTIMIZATION', 'startup')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>STARTUP OPTIMIZATION</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 11. Network Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="network ping latency dns packet loss tcp analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-globe"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Connectivity</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Network Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Analyze TCP/IP stack parameters, DNS resolution speed, network adapter throttling, and ping jitter optimizations.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>DNS Cache Latency:</span><strong class="text-slate-900 font-mono">24 ms</strong></div>
+              <div class="flex justify-between text-slate-600"><span>TCP Nagle's Algorithm:</span><strong class="text-amber-600 font-semibold">Enabled (Latency On)</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Network Throttling Index:</span><strong class="text-slate-900 font-mono">Default</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('ANALYZE NETWORK', 'network')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>ANALYZE NETWORK</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 12. Temporary File Cleanup -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="temporary file cleanup junk cache browser analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-broom"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Disk Space</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Temporary File Cleanup</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Identify leftover installation packages, crash dump logs, browser cache repositories, and temporary Windows update stores.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Windows Temp Junk:</span><strong class="text-amber-600 font-mono">2.8 GB</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Log Files & Dumps:</span><strong class="text-slate-900 font-mono">1.1 GB</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Browser Caches:</span><strong class="text-slate-900 font-mono">850 MB</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('CLEAN TEMPORARY FILES', 'cleanup')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>CLEAN TEMPORARY FILES</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 13. Power Optimization -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="power battery energy plan cpu throttling analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-yellow-100 text-yellow-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-bolt"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Power Management</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Power Optimization</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Optimize Windows power plans, adjust active CPU frequency scaling thresholds, and configure PCIe link power states.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Active Scheme:</span><strong class="text-amber-600 font-semibold">Balanced Power</strong></div>
+              <div class="flex justify-between text-slate-600"><span>PCIe ASPM State:</span><strong class="text-slate-900 font-mono">Moderate Power Save</strong></div>
+              <div class="flex justify-between text-slate-600"><span>CPU Frequency Throttle:</span><strong class="text-slate-900 font-mono">Dynamic Scaling</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('START OPTIMIZATION', 'power')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>START OPTIMIZATION</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 14. System Performance Analysis -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between category-card" data-title="system performance analysis benchmark latency thread stress analyze">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-chart-pie"></i>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Overall Benchmark</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">System Performance Analysis</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Perform an all-in-one system latency, memory bandwidth, and background execution profile report.
+              </p>
+            </div>
+
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-200/60">
+              <div class="flex justify-between text-slate-600"><span>Overall Score:</span><strong class="text-cyan-700 font-bold">78 / 100</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Latency Stability:</span><strong class="text-slate-900 font-mono">Good (3.2 ms jitter)</strong></div>
+              <div class="flex justify-between text-slate-600"><span>Tuning Potential:</span><strong class="text-emerald-600 font-semibold">+14% Efficiency</strong></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="triggerAction('START OPTIMIZATION', 'sysperf')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-cyan-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+              <span>START OPTIMIZATION</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Analysis Results Output Display Area -->
+      <div id="analysis-results-container" class="hidden glass-card-static rounded-3xl p-8 border border-cyan-300 shadow-glow-sm">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500 text-white flex items-center justify-center text-lg shadow-sm">
+              <i class="fa-solid fa-square-poll-vertical"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900" id="analysis-title">Analysis Results</h3>
+              <p class="text-xs text-slate-500">Demo analysis complete based on current web engine profiling parameters.</p>
+            </div>
+          </div>
+          <button onclick="hideAnalysisResults()" class="text-slate-400 hover:text-slate-700 text-sm">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <div class="mb-4 bg-cyan-50/80 p-4 rounded-2xl border border-cyan-200 flex items-start space-x-3 text-xs text-cyan-900">
+          <i class="fa-solid fa-flask text-cyan-600 text-base mt-0.5"></i>
+          <div>
+            <strong>Demo Analysis Information:</strong>
+            <p class="mt-0.5">This web version provides high-precision simulation demonstrations of how ULTRAFIX diagnoses system bottlenecks. Direct native kernel modification requires the full ULTRAFIX Desktop Client.</p>
+          </div>
+        </div>
+
+        <!-- Dynamic Items Container -->
+        <div id="analysis-items-body" class="space-y-4">
+          <!-- Filled dynamically via Javascript -->
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="text-xs text-slate-500">
+            <span>Recommended Actions Selected: </span>
+            <strong class="text-slate-800" id="selected-recommendations-count">2 optimizations queued</strong>
+          </div>
+          <button onclick="requestApplyOptimization()" class="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold text-sm rounded-xl shadow-glow-md transition-all flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-check-double"></i>
+            <span>APPLY OPTIMIZATION</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- =================================================================== -->
+    <!-- SECTION 3: AUTO OPTIMIZE SCANNER                                    -->
+    <!-- =================================================================== -->
+    <section id="section-auto" class="hidden space-y-8">
+      
+      <div class="glass-card-static rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden shadow-glass">
+        
+        <!-- Header text -->
+        <div class="max-w-2xl mx-auto space-y-3">
+          <span class="px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-xs font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Automated Diagnostic Routine
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            AUTO OPTIMIZATION SCANNER
+          </h2>
+          <p class="text-slate-600 text-sm sm:text-base">
+            Scan your system to identify performance bottlenecks, unnecessary resource usage, and optimization opportunities in one consolidated pass.
+          </p>
+        </div>
+
+        <!-- Scanner Animation Visualizer -->
+        <div class="my-10 relative flex items-center justify-center">
+          
+          <!-- Outer Radar Rings -->
+          <div class="w-64 h-64 sm:w-80 sm:h-80 rounded-full border border-cyan-200/80 flex items-center justify-center relative bg-gradient-to-b from-cyan-50/30 to-slate-50/10">
+            <div class="w-48 h-48 sm:w-60 sm:h-60 rounded-full border border-cyan-300/60 flex items-center justify-center">
+              <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full border border-cyan-400/50 flex items-center justify-center">
+                
+                <!-- Rotating Radar Line -->
+                <div id="radar-sweeper" class="hidden absolute inset-0 rounded-full animate-radar pointer-events-none" style="background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(6, 182, 212, 0.35) 360deg);"></div>
+                
+                <!-- Center Status Badge -->
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-900 text-cyan-400 flex flex-col items-center justify-center z-10 shadow-glow-md">
+                  <i id="scanner-icon" class="fa-solid fa-shield-cat text-2xl sm:text-3xl"></i>
+                  <span id="scanner-percent" class="text-[10px] font-mono mt-1 text-slate-300">READY</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- System Status Badge Before Scan -->
+        <div id="scanner-status-text" class="text-sm font-semibold text-slate-500 mb-6">
+          System Status: <span class="text-cyan-600 font-bold">Ready to Scan</span>
+        </div>
+
+        <!-- Big Scan Button -->
+        <div class="flex justify-center">
+          <button id="btn-scan-system" onclick="triggerAction('SCAN SYSTEM', 'auto_scan')" class="px-10 py-4 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-600 hover:to-indigo-700 text-white font-black text-base rounded-2xl shadow-glow-md hover:shadow-glow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center space-x-3">
+            <i class="fa-solid fa-bolt-lightning text-xl"></i>
+            <span class="tracking-wide">SCAN SYSTEM</span>
+          </button>
+        </div>
+
+        <p class="text-xs text-slate-400 mt-4">No system changes will be made automatically during or after the scan.</p>
+      </div>
+
+      <!-- AUTO SCAN RESULTS BREAKDOWN (Hidden by default) -->
+      <div id="auto-results-section" class="hidden space-y-6">
+        
+        <div class="flex items-center justify-between">
+          <h3 class="text-2xl font-extrabold text-slate-900 flex items-center">
+            <i class="fa-solid fa-list-check text-cyan-500 mr-2"></i> Diagnostics & Status Breakdown
+          </h3>
+          <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-mono">Scan Time: 1.4s</span>
+        </div>
+
+        <!-- Results Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <div class="glass-card-static rounded-2xl p-4 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 flex items-center"><i class="fa-solid fa-microchip text-slate-400 mr-2"></i> CPU Status</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Needs Attention</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">Background core parking throttles active threads during gaming load.</p>
+          </div>
+
+          <div class="glass-card-static rounded-2xl p-4 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 flex items-center"><i class="fa-solid fa-memory text-slate-400 mr-2"></i> RAM Status</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Good</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">Memory pool usage is optimal (45%). Standby cache can be reclaimed.</p>
+          </div>
+
+          <div class="glass-card-static rounded-2xl p-4 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 flex items-center"><i class="fa-solid fa-display text-slate-400 mr-2"></i> GPU Status</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Needs Attention</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">Graphics power plan set to energy saver mode under default profile.</p>
+          </div>
+
+          <div class="glass-card-static rounded-2xl p-4 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 flex items-center"><i class="fa-solid fa-hard-drive text-slate-400 mr-2"></i> SSD/HDD Status</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Excellent</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">TRIM is enabled. SSD sectors healthy with 0 bad blocks detected.</p>
+          </div>
+
+          <div class="glass-card-static rounded-2xl p-4 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 flex items-center"><i class="fa-solid fa-rocket text-slate-400 mr-2"></i> Startup Programs</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Needs Attention</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">6 high-impact third-party utilities autostarting during Windows boot.</p>
+          </div>
+
+          <div class="glass-card-static rounded-2xl p-4 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 flex items-center"><i class="fa-solid fa-broom text-slate-400 mr-2"></i> Temporary Files</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Needs Attention</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">4.2 GB of temporary system files, shader cache logs, and browser caches.</p>
+          </div>
+
+        </div>
+
+        <!-- RECOMMENDATIONS PANEL -->
+        <div class="glass-card-static rounded-3xl p-8 border border-slate-200 space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-xl font-bold text-slate-900">OPTIMIZATION RECOMMENDATIONS</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Review detected tweaks prior to applying updates.</p>
+            </div>
+            <button onclick="toggleSelectAllAutoRecs()" class="text-xs text-cyan-600 font-semibold hover:underline">Toggle Select All</button>
+          </div>
+
+          <div class="space-y-4">
+            
+            <label class="flex items-start space-x-3 p-4 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 cursor-pointer transition-colors">
+              <input type="checkbox" checked class="auto-rec-checkbox mt-1 w-4 h-4 text-cyan-600 rounded border-slate-300 focus:ring-cyan-500">
+              <div>
+                <div class="text-sm font-bold text-slate-900">Enable High Performance Power Profile & Unpark Core Threads</div>
+                <div class="text-xs text-slate-600 mt-1"><strong>Why:</strong> Standard balanced power plans cause micro-stutters when switching from low-power state to active game threads.</div>
+              </div>
+            </label>
+
+            <label class="flex items-start space-x-3 p-4 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 cursor-pointer transition-colors">
+              <input type="checkbox" checked class="auto-rec-checkbox mt-1 w-4 h-4 text-cyan-600 rounded border-slate-300 focus:ring-cyan-500">
+              <div>
+                <div class="text-sm font-bold text-slate-900">Purge Standby RAM Memory Cache & System Junk (4.2 GB)</div>
+                <div class="text-xs text-slate-600 mt-1"><strong>Why:</strong> Reclaims fragmented RAM memory blocks and removes old temporary files to restore disk IO responsiveness.</div>
+              </div>
+            </label>
+
+            <label class="flex items-start space-x-3 p-4 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 cursor-pointer transition-colors">
+              <input type="checkbox" checked class="auto-rec-checkbox mt-1 w-4 h-4 text-cyan-600 rounded border-slate-300 focus:ring-cyan-500">
+              <div>
+                <div class="text-sm font-bold text-slate-900">Disable Pointer Acceleration & Force Raw Input Buffer</div>
+                <div class="text-xs text-slate-600 mt-1"><strong>Why:</strong> Ensures 1:1 hardware cursor movement curves without Windows OS filtering interference.</div>
+              </div>
+            </label>
+
+          </div>
+
+          <div class="pt-4 border-t border-slate-200 flex justify-end">
+            <button onclick="requestApplyOptimization()" class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold text-sm rounded-xl shadow-glow-md transition-all flex items-center space-x-2">
+              <i class="fa-solid fa-check-double"></i>
+              <span>APPLY SELECTED OPTIMIZATIONS</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================================== -->
+    <!-- SECTION 4: SYSTEM STATUS PAGE                                       -->
+    <!-- =================================================================== -->
+    <section id="section-status" class="hidden space-y-8">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center">
+            <i class="fa-solid fa-chart-line text-cyan-500 mr-3"></i> System Status & Real-time Telemetry
+          </h2>
+          <p class="text-slate-500 text-sm mt-1">Live simulation monitor of hardware metrics, operating parameters, and active power profiles.</p>
+        </div>
+        <span class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-mono bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-ping"></span> Live Updates Active
+        </span>
+      </div>
+
+      <!-- Telemetry Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- CPU Status Card -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Processor</span>
+            <i class="fa-solid fa-microchip text-cyan-500 text-lg"></i>
+          </div>
+          <div>
+            <div class="text-lg font-bold text-slate-900 truncate">Intel Core i7 / Ryzen 7</div>
+            <div class="text-xs text-slate-500">8 Cores / 16 Threads @ 4.2 GHz</div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-slate-500">Usage Load:</span>
+              <span class="font-bold text-slate-800" id="stat-cpu-usage">24%</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div id="stat-cpu-bar" class="bg-cyan-500 h-2 rounded-full transition-all duration-500" style="width: 24%"></div>
+            </div>
+          </div>
+          <div class="flex justify-between text-xs pt-2 border-t border-slate-100 text-slate-600">
+            <span>Estimated Temp:</span>
+            <strong class="font-mono text-emerald-600">48°C (Normal)</strong>
+          </div>
+        </div>
+
+        <!-- RAM Status Card -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Memory (RAM)</span>
+            <i class="fa-solid fa-memory text-blue-500 text-lg"></i>
+          </div>
+          <div>
+            <div class="text-lg font-bold text-slate-900">16.0 GB DDR4/DDR5</div>
+            <div class="text-xs text-slate-500">Dual-Channel @ 3200 MHz</div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-slate-500">Allocated:</span>
+              <span class="font-bold text-slate-800" id="stat-ram-text">7.2 GB (45%)</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div id="stat-ram-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="flex justify-between text-xs pt-2 border-t border-slate-100 text-slate-600">
+            <span>Available:</span>
+            <strong class="font-mono text-slate-800">8.8 GB Free</strong>
+          </div>
+        </div>
+
+        <!-- GPU Status Card -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Graphics (GPU)</span>
+            <i class="fa-solid fa-display text-emerald-500 text-lg"></i>
+          </div>
+          <div>
+            <div class="text-lg font-bold text-slate-900 truncate">NVIDIA / AMD Radeon</div>
+            <div class="text-xs text-slate-500">DirectX 12 Ultimate Support</div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-slate-500">VRAM Allocation:</span>
+              <span class="font-bold text-slate-800">2.1 GB / 8.0 GB</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div class="bg-emerald-500 h-2 rounded-full" style="width: 26%"></div>
+            </div>
+          </div>
+          <div class="flex justify-between text-xs pt-2 border-t border-slate-100 text-slate-600">
+            <span>Power State:</span>
+            <strong class="font-mono text-cyan-700">P0 High Clock</strong>
+          </div>
+        </div>
+
+        <!-- Storage Status Card -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Storage (SSD)</span>
+            <i class="fa-solid fa-hard-drive text-purple-500 text-lg"></i>
+          </div>
+          <div>
+            <div class="text-lg font-bold text-slate-900">NVMe High-Speed SSD</div>
+            <div class="text-xs text-slate-500">Primary Partition (C:)</div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-slate-500">Capacity:</span>
+              <span class="font-bold text-slate-800">340 GB / 512 GB</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div class="bg-purple-500 h-2 rounded-full" style="width: 66%"></div>
+            </div>
+          </div>
+          <div class="flex justify-between text-xs pt-2 border-t border-slate-100 text-slate-600">
+            <span>Free Space:</span>
+            <strong class="font-mono text-slate-800">172 GB Free</strong>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Extended System Information Panel -->
+      <div class="glass-card-static rounded-3xl p-8 border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-2">Operating Environment</h3>
+          <div class="space-y-3 text-xs">
+            <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-500">Operating System:</span><strong class="text-slate-800 font-mono">Windows 11 Home / Pro (64-bit)</strong></div>
+            <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-500">Kernel Version:</span><strong class="text-slate-800 font-mono">Build 22631.3007</strong></div>
+            <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-500">Power Profile:</span><strong class="text-cyan-700 font-semibold">ULTRAFIX Balanced Tuning</strong></div>
+            <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-500">Active Game Mode:</span><strong class="text-emerald-600 font-semibold">Enabled</strong></div>
+          </div>
+        </div>
+
+        <!-- Realtime Latency & Jitter Simulator Widget -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-2 flex items-center justify-between">
+            <span>Input & Thread Latency</span>
+            <button onclick="runLatencyCheck()" class="text-xs text-cyan-600 font-semibold hover:underline">Test Latency</button>
+          </h3>
+          <div class="bg-slate-900 text-white p-5 rounded-2xl font-mono text-xs space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">Timer Resolution:</span>
+              <span class="text-cyan-400 font-bold" id="lat-timer">0.500 ms</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">DPC Latency Buffer:</span>
+              <span class="text-emerald-400 font-bold" id="lat-dpc">42 μs (Optimal)</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">Mouse Input Queue:</span>
+              <span class="text-cyan-400 font-bold" id="lat-input">1.0 ms @ 1000Hz</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================================== -->
+    <!-- SECTION 5: ABOUT & TRANSPARENCY                                     -->
+    <!-- =================================================================== -->
+    <section id="section-about" class="hidden space-y-8">
+      
+      <div class="glass-card-static rounded-3xl p-8 sm:p-12 border border-slate-200 space-y-8">
+        
+        <div>
+          <span class="px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-xs font-bold uppercase tracking-wider">
+            Transparency First
+          </span>
+          <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-3">
+            About ULTRAFIX & Web Security Model
+          </h2>
+          <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+            ULTRAFIX is engineered to provide PC enthusiasts, competitive gamers, and performance seekers with transparent diagnostic insights and performance optimization workflows.
+          </p>
+        </div>
+
+        <!-- Grid Matrix: Web Edition vs Desktop Client -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center space-x-3 text-cyan-600">
+              <i class="fa-solid fa-globe text-2xl"></i>
+              <h3 class="text-lg font-bold text-slate-900">ULTRAFIX Web Edition</h3>
+            </div>
+            <ul class="text-xs text-slate-600 space-y-2.5">
+              <li class="flex items-start"><i class="fa-solid fa-check text-emerald-500 mr-2 mt-0.5"></i> Interactive diagnostic simulation and tuning checklists</li>
+              <li class="flex items-start"><i class="fa-solid fa-check text-emerald-500 mr-2 mt-0.5"></i> Browser-based input latency testing and timer checks</li>
+              <li class="flex items-start"><i class="fa-solid fa-check text-emerald-500 mr-2 mt-0.5"></i> Guided Windows power and registry optimization instructions</li>
+              <li class="flex items-start text-slate-400"><i class="fa-solid fa-xmark text-slate-400 mr-2 mt-0.5"></i> Cannot directly alter host Windows registry due to browser sandbox</li>
+            </ul>
+          </div>
+
+          <div class="p-6 bg-slate-900 text-white rounded-2xl shadow-glow-sm space-y-4">
+            <div class="flex items-center space-x-3 text-cyan-400">
+              <i class="fa-solid fa-desktop text-2xl"></i>
+              <h3 class="text-lg font-bold text-white">ULTRAFIX Native Desktop</h3>
+            </div>
+            <ul class="text-xs text-slate-300 space-y-2.5">
+              <li class="flex items-start"><i class="fa-solid fa-check text-cyan-400 mr-2 mt-0.5"></i> Direct low-level Windows registry kernel tuning</li>
+              <li class="flex items-start"><i class="fa-solid fa-check text-cyan-400 mr-2 mt-0.5"></i> Native CPU core unparking and thread affinity locking</li>
+              <li class="flex items-start"><i class="fa-solid fa-check text-cyan-400 mr-2 mt-0.5"></i> Direct GPU shader cache flushing and VRAM optimization</li>
+              <li class="flex items-start"><i class="fa-solid fa-check text-cyan-400 mr-2 mt-0.5"></i> Automated system restore point creation before tweaks</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Trust Pledge -->
+        <div class="bg-cyan-50/60 p-6 rounded-2xl border border-cyan-200 text-xs text-cyan-900 space-y-2">
+          <h4 class="font-bold text-sm text-cyan-950 flex items-center">
+            <i class="fa-solid fa-shield-heart text-cyan-600 mr-2"></i> Responsible Performance Guarantee
+          </h4>
+          <p class="leading-relaxed">
+            ULTRAFIX does not make false, exaggerated claims regarding guaranteed frame rate multiplies or unrealistic temperature drops. Real-world performance gains depend strictly on your computer's CPU architecture, GPU drivers, storage drive specs, and background Windows workload.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =================================================================== -->
+  <!-- MODAL 1: MANDATORY DISCLAIMER MODAL (Requirement 13)                 -->
+  <!-- =================================================================== -->
+  <div id="modal-disclaimer" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md transition-opacity">
+    <div class="glass-card-static rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-cyan-300/80 relative transform transition-all animate-in fade-in zoom-in duration-200">
+      
+      <!-- Warning Header -->
+      <div class="flex items-center space-x-3 border-b border-slate-200 pb-4 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">⚠️ BEFORE YOU CONTINUE</h3>
+          <p class="text-xs text-slate-500">ULTRAFIX Safety & Performance Disclaimer</p>
+        </div>
+      </div>
+
+      <!-- Disclaimer Text Body -->
+      <div class="space-y-3 text-xs text-slate-600 max-h-60 overflow-y-auto pr-1 leading-relaxed">
+        <p>
+          ULTRAFIX provides system analysis and optimization recommendations for informational and performance-improvement purposes.
+        </p>
+        <p>
+          Some optimization changes may affect Windows settings, application behavior, system performance, or user preferences.
+        </p>
+        <p>
+          Always review the recommended changes before applying them. ULTRAFIX should never make significant system changes without the user's confirmation.
+        </p>
+        <p>
+          Create a restore point or backup important data before making major system changes.
+        </p>
+        <p>
+          Results can vary depending on the hardware, drivers, Windows configuration, applications, and games installed on the computer.
+        </p>
+      </div>
+
+      <!-- Mandatory Checkbox Confirmation -->
+      <div class="mt-5 pt-4 border-t border-slate-200">
+        <label class="flex items-center space-x-3 cursor-pointer">
+          <input type="checkbox" id="disclaimer-checkbox" onchange="toggleDisclaimerButton()" class="w-4 h-4 text-cyan-600 rounded border-slate-300 focus:ring-cyan-500">
+          <span class="text-xs font-semibold text-slate-800">I understand and want to continue</span>
+        </label>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-6 flex items-center justify-end space-x-3">
+        <button onclick="closeDisclaimerModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-all">
+          CANCEL
+        </button>
+        <button id="btn-disclaimer-continue" disabled onclick="confirmDisclaimerModal()" class="px-6 py-2.5 bg-cyan-600 hover:bg-cyan-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs rounded-xl shadow-glow-sm transition-all">
+          CONTINUE
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =================================================================== -->
+  <!-- MODAL 2: CONFIRM OPTIMIZATION MODAL (Requirement 9)                -->
+  <!-- =================================================================== -->
+  <div id="modal-confirm-apply" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md transition-opacity">
+    <div class="glass-card-static rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-cyan-300 relative">
+      
+      <div class="flex items-center space-x-3 border-b border-slate-200 pb-4 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-list-check"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">CONFIRM OPTIMIZATION CHANGES</h3>
+          <p class="text-xs text-slate-500">Review selected adjustments prior to execution</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-600 mb-3">
+        ULTRAFIX is ready to apply the following optimization parameters:
+      </p>
+
+      <ul class="space-y-2 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200 text-slate-700 font-mono mb-6" id="confirm-changes-list">
+        <!-- Dynamic list items -->
+      </ul>
+
+      <div class="flex items-center justify-end space-x-3">
+        <button onclick="closeConfirmModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-all">
+          GO BACK
+        </button>
+        <button onclick="applyOptimizationsFinal()" class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold text-xs rounded-xl shadow-glow-md transition-all flex items-center space-x-2">
+          <i class="fa-solid fa-bolt"></i>
+          <span>APPLY CHANGES</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+
+  <!-- PERSISTENT FOOTER -->
+  <footer class="glass-header mt-16 border-t border-slate-200 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      
+      <div>
+        <div class="text-xl ultrafix-logo">
+          <span class="ultrafix-text-ultra">ULTRA</span>
+          <span class="ultrafix-text-fix">FIX</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">Professional PC & Laptop Optimization Platform</p>
+      </div>
+
+      <div class="flex items-center space-x-6 text-xs text-slate-600 font-medium">
+        <button onclick="switchTab('home')" class="hover:text-cyan-600">Home</button>
+        <button onclick="switchTab('manual')" class="hover:text-cyan-600">Optimization</button>
+        <button onclick="switchTab('status')" class="hover:text-cyan-600">System Status</button>
+        <button onclick="switchTab('about')" class="hover:text-cyan-600">About</button>
+      </div>
+
+      <div class="text-xs text-slate-400">
+        &copy; 2026 ULTRAFIX Systems. All rights reserved.
+      </div>
+
+    </div>
+  </footer>
+
+
+  <script>
+    // Global state
+    let pendingActionTitle = '';
+    let pendingActionType = '';
+    let currentTab = 'home';
+
+    // Simulated data dictionaries for manual analyses
+    const categoryAnalysisData = {
+      cpu: {
+        title: "CPU Optimization Analysis",
+        items: [
+          { title: "Background Core Parking", desc: "4 secondary CPU core threads parked during idle states.", rec: "Unpark core threads for constant zero-latency response." },
+          { title: "Power Scheme Profile", desc: "Balanced plan detected. Potential CPU frequency scaling latency under sudden game load.", rec: "Activate ULTRAFIX High Performance Power Plan." },
+          { title: "Startup Thread Throttling", desc: "18 non-critical background services running on Core 0.", rec: "Re-assign non-essential services to secondary threads." }
+        ]
+      },
+      ram: {
+        title: "RAM Optimization Analysis",
+        items: [
+          { title: "Standby Memory Pool", desc: "3.4 GB of cached files clogging physical memory.", rec: "Purge Standby Memory cache to free clean RAM." },
+          { title: "Background Memory Leak", desc: "3 third-party updater processes consuming 480 MB unnecessarily.", rec: "Terminate and block passive background updater services." }
+        ]
+      },
+      ssd: {
+        title: "SSD Health & TRIM Analysis",
+        items: [
+          { title: "TRIM Command Execution", desc: "TRIM hasn't executed in 14 days.", rec: "Execute immediate TRIM command pass to maintain SSD read speeds." },
+          { title: "Temporary File Storage", desc: "4.2 GB of temporary install blocks located in Windows Temp.", rec: "Safe purge of temporary update folders." }
+        ]
+      },
+      hdd: {
+        title: "HDD Diagnostics Analysis",
+        items: [
+          { title: "Fragmentation Level", desc: "12% sector fragmentation detected on Drive D:.", rec: "Defragment sector maps during idle hours." }
+        ]
+      },
+      gpu: {
+        title: "GPU Performance Analysis",
+        items: [
+          { title: "NVIDIA / AMD Power Management", desc: "GPU Power profile set to Optimal Power instead of Maximum Performance.", rec: "Switch GPU driver power mode to Preferred Maximum Performance." },
+          { title: "Shader Cache Allocation", desc: "Default 1 GB shader cache size limit reached.", rec: "Expand Shader Cache limit to 10 GB to eliminate in-game texture stutters." }
+        ]
+      },
+      mouse: {
+        title: "Mouse & Input Latency Analysis",
+        items: [
+          { title: "Enhance Pointer Precision", desc: "Windows acceleration curve active. May cause inconsistent mouse aim.", rec: "Disable Enhance Pointer Precision (Enforce 1:1 Raw Input)." }
+        ]
+      },
+      keyboard: {
+        title: "Keyboard Responsiveness Analysis",
+        items: [
+          { title: "Filter Keys & Repeat Rate", desc: "Default Windows key repeat delay set to 250ms.", rec: "Optimize Key Repeat Rate buffer to 150ms." }
+        ]
+      },
+      gaming: {
+        title: "Gaming Mode Diagnostics",
+        items: [
+          { title: "Game DVR Background Recording", desc: "Background video recording active in Windows Settings.", rec: "Disable Game DVR to save 5-8% CPU overhead." },
+          { title: "Hardware-Accelerated GPU Scheduling (HAGS)", desc: "HAGS disabled in OS settings.", rec: "Enable HAGS for DirectX 12 render pipelines." }
+        ]
+      },
+      windows: {
+        title: "Windows OS Optimization",
+        items: [
+          { title: "Windows Telemetry Logging", desc: "Connected User Experiences & Telemetry active.", rec: "Disable non-essential diagnostics telemetry." }
+        ]
+      },
+      startup: {
+        title: "Startup Acceleration Analysis",
+        items: [
+          { title: "High-Impact Startup Apps", desc: "5 applications configured to start on boot.", rec: "Disable auto-start for third-party launchers." }
+        ]
+      },
+      network: {
+        title: "Network Latency Analysis",
+        items: [
+          { title: "TCP Nagle's Algorithm", desc: "Packet queuing delay enabled for network traffic.", rec: "Disable Nagle's Algorithm (TcpAckFrequency = 1) for lower gaming ping." }
+        ]
+      },
+      cleanup: {
+        title: "Temporary File Cleanup Analysis",
+        items: [
+          { title: "System Junk Accumulation", desc: "4.7 GB junk files identified.", rec: "Perform automated safe cleanup." }
+        ]
+      },
+      power: {
+        title: "Power Plan Diagnostics",
+        items: [
+          { title: "PCIe ASPM Link Power State", desc: "PCIe bus entering low-power state during games.", rec: "Set PCIe Link State Power Management to Off." }
+        ]
+      },
+      sysperf: {
+        title: "System Performance Benchmark",
+        items: [
+          { title: "Overall Efficiency Bottleneck", desc: "Multiple small background factors slowing performance by 12%.", rec: "Apply ULTRAFIX recommended master optimization." }
+        ]
+      }
+    };
+
+    function switchTab(tabId) {
+      currentTab = tabId;
+
+      // Hide all content sections
+      const sections = ['home', 'manual', 'auto', 'status', 'about'];
+      sections.forEach(s => {
+        const el = document.getElementById('section-' + s);
+        if (el) el.classList.add('hidden');
+
+        const navBtn = document.getElementById('nav-' + s);
+        if (navBtn) {
+          navBtn.classList.remove('nav-tab-active');
+        }
+      });
+
+      // Show selected section
+      const activeEl = document.getElementById('section-' + tabId);
+      if (activeEl) {
+        activeEl.classList.remove('hidden');
+      }
+
+      // Highlight active nav tab
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.classList.add('nav-tab-active');
+      }
+
+      // Scroll smoothly to top of application
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMobileNav() {
+      const mob = document.getElementById('mobile-nav');
+      mob.classList.toggle('hidden');
+    }
+
+    function triggerAction(actionTitle, type) {
+      pendingActionTitle = actionTitle;
+      pendingActionType = type;
+
+      // Reset checkbox state inside modal
+      const chk = document.getElementById('disclaimer-checkbox');
+      chk.checked = false;
+      document.getElementById('btn-disclaimer-continue').disabled = true;
+
+      // Open Disclaimer Modal
+      const modal = document.getElementById('modal-disclaimer');
+      modal.classList.remove('hidden');
+    }
+
+    function toggleDisclaimerButton() {
+      const chk = document.getElementById('disclaimer-checkbox');
+      const btn = document.getElementById('btn-disclaimer-continue');
+      btn.disabled = !chk.checked;
+    }
+
+    function closeDisclaimerModal() {
+      document.getElementById('modal-disclaimer').classList.add('hidden');
+    }
+
+    function confirmDisclaimerModal() {
+      closeDisclaimerModal();
+      
+      // Toast notice
+      showToast("Accepted disclaimer. Executing: " + pendingActionTitle, "info");
+
+      // Handle based on action type
+      if (pendingActionType === 'auto_scan') {
+        runAutoScanRoutine();
+      } else {
+        runManualCategoryAnalysis(pendingActionType);
+      }
+    }
+
+    function runManualCategoryAnalysis(type) {
+      const data = categoryAnalysisData[type] || categoryAnalysisData['cpu'];
+      const container = document.getElementById('analysis-results-container');
+      const titleEl = document.getElementById('analysis-title');
+      const bodyEl = document.getElementById('analysis-items-body');
+
+      titleEl.innerText = data.title;
+      bodyEl.innerHTML = '';
+
+      data.items.forEach((item, idx) => {
+        const itemHtml = `
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-start justify-between">
+              <span class="text-sm font-bold text-slate-900 flex items-center">
+                <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2 text-xs"></i>
+                ${item.title}
+              </span>
+              <span class="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-semibold">Detected</span>
+            </div>
+            <p class="text-xs text-slate-600">${item.desc}</p>
+            <div class="text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-slate-700">
+              <strong class="text-cyan-700">Recommendation:</strong> ${item.rec}
+            </div>
+          </div>
+        `;
+        bodyEl.innerHTML += itemHtml;
+      });
+
+      document.getElementById('selected-recommendations-count').innerText = `${data.items.length} optimization(s) queued`;
+
+      container.classList.remove('hidden');
+      container.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideAnalysisResults() {
+      document.getElementById('analysis-results-container').classList.add('hidden');
+    }
+
+    function runAutoScanRoutine() {
+      const btn = document.getElementById('btn-scan-system');
+      const statusText = document.getElementById('scanner-status-text');
+      const sweeper = document.getElementById('radar-sweeper');
+      const percentEl = document.getElementById('scanner-percent');
+      const resultsSec = document.getElementById('auto-results-section');
+
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+      resultsSec.classList.add('hidden');
+      sweeper.classList.remove('hidden');
+
+      let progress = 0;
+      statusText.innerHTML = 'System Status: <span class="text-cyan-600 font-bold animate-pulse">Scanning Kernel, Threads & Storage...</span>';
+
+      const interval = setInterval(() => {
+        progress += 10;
+        percentEl.innerText = progress + '%';
+
+        if (progress >= 100) {
+          clearInterval(interval);
+          sweeper.classList.add('hidden');
+          btn.disabled = false;
+          btn.classList.remove('opacity-50');
+          percentEl.innerText = 'DONE';
+          statusText.innerHTML = 'System Status: <span class="text-emerald-600 font-bold">Scan Completed (3 Issues Identified)</span>';
+          resultsSec.classList.remove('hidden');
+          resultsSec.scrollIntoView({ behavior: 'smooth' });
+          showToast("Auto Optimization Scan Completed successfully!", "success");
+        }
+      }, 150);
+    }
+
+    function toggleSelectAllAutoRecs() {
+      const boxes = document.querySelectorAll('.auto-rec-checkbox');
+      const allChecked = Array.from(boxes).every(b => b.checked);
+      boxes.forEach(b => b.checked = !allChecked);
+    }
+
+    function requestApplyOptimization() {
+      const confirmList = document.getElementById('confirm-changes-list');
+      confirmList.innerHTML = `
+        <li>&bull; Modify power scheme profile to ULTRAFIX High Performance</li>
+        <li>&bull; Unpark inactive CPU core threads during load</li>
+        <li>&bull; Purge standby memory cache blocks (reclaim ~3.4 GB)</li>
+        <li>&bull; Disable Windows Mouse pointer acceleration curve</li>
+      `;
+      document.getElementById('modal-confirm-apply').classList.remove('hidden');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('modal-confirm-apply').classList.add('hidden');
+    }
+
+    function applyOptimizationsFinal() {
+      closeConfirmModal();
+      showToast("ULTRAFIX Optimization Applied Successfully!", "success");
+      
+      // Update quick health score
+      document.getElementById('header-health-score').innerText = "99% Optimized";
+      document.getElementById('header-health-score').className = "text-xs font-bold text-cyan-600 flex items-center justify-end space-x-1";
+    }
+
+    function filterCategories() {
+      const q = document.getElementById('category-search').value.toLowerCase();
+      const cards = document.querySelectorAll('.category-card');
+      cards.forEach(card => {
+        const title = card.getAttribute('data-title').toLowerCase();
+        if (title.includes(q)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    function runLatencyCheck() {
+      showToast("Testing input timer latency...", "info");
+      setTimeout(() => {
+        document.getElementById('lat-timer').innerText = "0.500 ms (Locked)";
+        document.getElementById('lat-dpc').innerText = "28 μs (Ultra Low)";
+        showToast("Latency check finished. Resolution locked at 0.5ms.", "success");
+      }, 800);
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      let bg = 'bg-slate-900 text-white';
+      let icon = 'fa-info-circle text-cyan-400';
+      if (type === 'success') {
+        bg = 'bg-slate-900 text-white border-l-4 border-emerald-500';
+        icon = 'fa-circle-check text-emerald-400';
+      }
+
+      toast.className = `p-4 rounded-xl shadow-2xl text-xs font-medium flex items-center space-x-3 pointer-events-auto transform transition-all duration-300 translate-y-2 ${bg}`;
+      toast.innerHTML = `
+        <i class="fa-solid ${icon} text-base"></i>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-4');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    setInterval(() => {
+      // Small simulated usage fluctuations
+      if (currentTab === 'status' || currentTab === 'home') {
+        const randomCpu = Math.floor(18 + Math.random() * 12);
+        const cpuEl = document.getElementById('stat-cpu-usage');
+        const cpuBar = document.getElementById('stat-cpu-bar');
+        const quickCpu = document.getElementById('quick-cpu');
+
+        if (cpuEl) cpuEl.innerText = randomCpu + '%';
+        if (cpuBar) cpuBar.style.width = randomCpu + '%';
+        if (quickCpu) quickCpu.innerText = randomCpu + '%';
+      }
+    }, 2500);
+
+    // Initial default tab setup
+    window.onload = function() {
+      switchTab('home');
+    };
+  </script>
+</body>
+</html>
